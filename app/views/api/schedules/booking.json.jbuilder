@@ -1,0 +1,1 @@
+json.book_user @user_book
