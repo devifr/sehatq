@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Api::SessionsController < Devise::SessionsController
-  skip_before_action :verify_authenticity_token, :only => :create
+  skip_before_action :verify_authenticity_token, :only => [:create, :destroy]
   before_action :sign_in_params, only: :create
   before_action :load_user, only: :create
   # sign in
@@ -18,6 +20,15 @@ class Api::SessionsController < Devise::SessionsController
         data: {}
       }, status: :unauthorized
     end
+  end
+
+  def destroy
+    sign_out(current_user)
+    render json: {
+      messages: 'Sign Out Successfully',
+      is_success: true,
+      data: {}
+    }, status: :ok
   end
 
   private

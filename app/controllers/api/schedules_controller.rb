@@ -1,8 +1,7 @@
 class Api::SchedulesController < ApiController
-  before_action :authenticate_user!
 
   def index
-    @user_books = UserBook.filter(params)
+    @user_books = UserBook.by_user(current_user.id)
   end
 
   def booking
@@ -17,7 +16,7 @@ class Api::SchedulesController < ApiController
           @error_message = 'You Cant Booking, Because More Than 30 minutes Before Doctor Start'
           render 'api/shared/error.json', status: :unprocessable_entity
         else
-          @user_book = UserBook.find_or_initialize_by(user_id: current_user.id)
+          @user_book = UserBook.new(user_id: current_user.id)
           @user_book.doctor_id  = booking_params[:doctor_id]
           @user_book.booking_at = booking_at
           @user_book.save
